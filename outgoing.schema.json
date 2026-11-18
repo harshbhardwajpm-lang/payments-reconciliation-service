@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Outgoing network record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["event_id", "idempotency_key", "network", "event_type", "account_token", "old_state", "new_state", "outgoing_sha256"],
+  "properties": {
+    "event_id": {"type": "string", "format": "uuid"}, "idempotency_key": {"type": "string"},
+    "network": {"enum": ["MASTERCARD", "VISA"]},
+    "event_type": {"enum": ["EXPIRY_DATE_CHANGE", "ACCOUNT_NUMBER_CHANGE", "TRANSFER", "ISSUE"]},
+    "account_token": {"type": "string"}, "effective_date": {"type": ["string", "null"], "format": "date"},
+    "old_state": {"$ref": "schema.json#/$defs/accountState"}, "new_state": {"$ref": "schema.json#/$defs/accountState"},
+    "outgoing_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

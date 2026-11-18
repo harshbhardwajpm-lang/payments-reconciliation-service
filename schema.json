@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Canonical reconciliation event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "event_id", "idempotency_key", "source", "identity", "old_state", "new_state", "event_type", "network", "currency", "amount_minor", "rule_version", "status"],
+  "properties": {
+    "schema_version": {"const": 1}, "event_id": {"type": "string", "format": "uuid"},
+    "idempotency_key": {"type": "string", "minLength": 16},
+    "source": {"type": "object", "additionalProperties": false, "required": ["bank_id", "file_id", "record_number"], "properties": {"bank_id": {"type": "string"}, "file_id": {"type": "string"}, "record_number": {"type": "integer", "minimum": 1}}},
+    "identity": {"type": "object", "additionalProperties": false, "required": ["account_token"], "properties": {"account_token": {"type": "string", "minLength": 1}, "prior_account_token": {"type": ["string", "null"]}, "transaction_id": {"type": ["string", "null"]}}},
+    "old_state": {"$ref": "#/$defs/accountState"}, "new_state": {"$ref": "#/$defs/accountState"},
+    "event_type": {"enum": ["EXPIRY_DATE_CHANGE", "ACCOUNT_NUMBER_CHANGE", "TRANSFER", "ISSUE", "FRAUD"]},
+    "network": {"enum": ["MASTERCARD", "VISA"]}, "currency": {"type": "string", "pattern": "^[A-Z]{3}$"},
+    "amount_minor": {"type": "integer"}, "effective_date": {"type": "string", "format": "date"},
+    "rule_version": {"type": "string"}, "status": {"enum": ["RECEIVED", "READY", "HELD", "RELEASED", "ACK_ACCEPTED", "ACK_REJECTED", "DEAD_LETTER"]},
+    "reason_codes": {"type": "array", "items": {"type": "string"}},
+    "outgoing_record_id": {"type": ["string", "null"]}, "acknowledgement_id": {"type": ["string", "null"]}
+  },
+  "$defs": {"accountState": {"type": "object", "additionalProperties": false, "required": ["account_token", "expiry_month", "expiry_year"], "properties": {"account_token": {"type": "string", "minLength": 1}, "expiry_month": {"type": ["integer", "null"], "minimum": 1, "maximum": 12}, "expiry_year": {"type": ["integer", "null"], "minimum": 2000, "maximum": 9999}}}}
+}

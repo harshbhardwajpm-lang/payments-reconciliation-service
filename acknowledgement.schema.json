@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Network acknowledgement",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["event_id", "idempotency_key", "outgoing_sha256", "status"],
+  "properties": {
+    "event_id": {"type": "string", "format": "uuid"}, "idempotency_key": {"type": "string"},
+    "outgoing_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "status": {"enum": ["ACCEPTED", "REJECTED"]}, "network_reference": {"type": ["string", "null"]}, "reason_code": {"type": ["string", "null"]}
+  }
+}
